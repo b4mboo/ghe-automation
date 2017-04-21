@@ -2,7 +2,7 @@
 
 # Variables which may need to be configurable at some point.
 hostname = ARGV[0]
-password = ARGV[1]
+password = ARGV[1] || File.read('/home/ec2-user/secrets/ghe-password').chomp!
 protocol = 'https://'
 port = 8443
 license = '/home/ec2-user/licenses/ghe-license.ghl'
