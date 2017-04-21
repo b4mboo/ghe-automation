@@ -6,6 +6,7 @@ password = ARGV[1] || File.read('/home/ec2-user/secrets/ghe-password').chomp!
 protocol = 'https://'
 port = 8443
 license = '/home/ec2-user/licenses/ghe-license.ghl'
+keys = '/home/ec2-user/keys'
 
 # Variables to reduce code duplication.
 curl = 'curl -L -k -X POST'
@@ -25,7 +26,7 @@ while status.scan(/DONE/).count != 5
   status = check.call
   puts status
 end
-Dir.glob("/home/ec2-user/keys/*").select{|k| k.end_with?(".pub")}.each do |key|
+Dir.glob("#{keys}/*").select{|k| k.end_with?(".pub")}.each do |key|
   system "#{curl} '#{path}/settings/authorized-keys' -F authorized_key=@#{key}"
 end
 
