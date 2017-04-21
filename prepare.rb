@@ -8,6 +8,7 @@ port = 8443
 license = '/home/ec2-user/licenses/ghe-license.ghl'
 keys = '/home/ec2-user/keys'
 backup-utils = '/home/ec2-user/backup-utils-master'
+snapshot = '2.7.3'
 
 # Variables to reduce code duplication.
 curl = 'curl -L -k -X POST'
@@ -33,5 +34,5 @@ end
 
 # Restore data from backup.
 system "#{curl} '#{path}/maintenance' -d 'maintenance={\"enabled\":true, \"when\":\"now\"}'"
-system "#{backup-utils}/bin/ghe-restore -v -f -s 2.7.3 #{hostname}"
+system "#{backup-utils}/bin/ghe-restore -v -f -s #{snapshot} #{hostname}"
 system "#{curl} '#{path}/maintenance' -d 'maintenance={\"enabled\":false, \"when\":\"now\"}'"
