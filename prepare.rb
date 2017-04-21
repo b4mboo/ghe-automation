@@ -1,13 +1,13 @@
 #!/usr/bin/env ruby
 
-# Variables which may need to be configurable at some point.
+# Variables to configure the script.
 hostname = ARGV[0]
 password = ARGV[1] || File.read('/home/ec2-user/secrets/ghe-password').chomp!
 protocol = 'https://'
 port = 8443
 license = '/home/ec2-user/licenses/ghe-license.ghl'
 
-# Variables which are simply created to reduce code duplication.
+# Variables to reduce code duplication.
 curl = 'curl -L -k -X POST'
 api = '/setup/api'
 url = "#{hostname}:#{port}"
