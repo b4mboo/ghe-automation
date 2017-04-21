@@ -25,9 +25,8 @@ while status.scan(/DONE/).count != 5
   status = check.call
   puts status
 end
-# TODO: Iterate over the keys directory.
-['b4mboo'].each do |key|
-  system "#{curl} '#{path}/settings/authorized-keys' -F authorized_key=@/home/ec2-user/keys/#{key}.pub"
+Dir.glob("/home/ec2-user/keys/*").select{|k| k.end_with?(".pub")}.each do |key|
+  system "#{curl} '#{path}/settings/authorized-keys' -F authorized_key=@#{key}"
 end
 
 # Restore data from backup.
