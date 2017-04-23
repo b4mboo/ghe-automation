@@ -1,8 +1,15 @@
 #!/usr/bin/env ruby
 
+# Launch new instance on AWS using Ansible.
+instance = `ansible-playbook /home/ec2-user/scripts/ansible-ghe-launch.yaml --extra-vars 'image=ami-ecb96483 region=eu-central-1 key_name=ES-Jumphost'`
+puts instance
+
+# TODO: Check whether GHE is ready, instead of blindly waiting for a minute.
+sleep 60
+
 # Variables to configure the script.
-hostname = ARGV[0]
-password = ARGV[1] || File.read('/home/ec2-user/secrets/ghe-password').chomp!
+hostname = instance[/.*public_ip': u'([^', u]*)/,1]
+password = File.read('/home/ec2-user/secrets/ghe-password').chomp!
 protocol = 'https://'
 port = 8443
 license = '/home/ec2-user/licenses/ghe-license.ghl'
@@ -36,3 +43,6 @@ end
 system "#{curl} '#{path}/maintenance' -d 'maintenance={\"enabled\":true, \"when\":\"now\"}'"
 system "#{backup-utils}/bin/ghe-restore -v -f -s #{snapshot} #{hostname}"
 system "#{curl} '#{path}/maintenance' -d 'maintenance={\"enabled\":false, \"when\":\"now\"}'"
+
+# Done.
+puts "GitHub Enterprise is ready at #{protocol}#{hostname}."
