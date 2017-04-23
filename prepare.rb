@@ -14,7 +14,7 @@ protocol = 'https://'
 port = 8443
 license = '/home/ec2-user/licenses/ghe-license.ghl'
 keys = '/home/ec2-user/keys'
-backup-utils = '/home/ec2-user/backup-utils-master'
+backup = '/home/ec2-user/backup-utils-master'
 snapshot = '2.7.3'
 
 # Variables to reduce code duplication.
@@ -41,7 +41,7 @@ end
 
 # Restore data from backup.
 system "#{curl} '#{path}/maintenance' -d 'maintenance={\"enabled\":true, \"when\":\"now\"}'"
-system "#{backup-utils}/bin/ghe-restore -v -f -s #{snapshot} #{hostname}"
+system "#{backup}/bin/ghe-restore -v -f -s #{snapshot} #{hostname}"
 system "#{curl} '#{path}/maintenance' -d 'maintenance={\"enabled\":false, \"when\":\"now\"}'"
 
 # Done.
